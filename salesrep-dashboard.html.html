@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0A5C44">
+<title>SalesRep — Owner Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F0F4F1;--bg2:#E8EDE9;--sf:#FFFFFF;--sf2:#F8FAF8;
+  --g1:#0A5C44;--g2:#0F7A5A;--g3:#22C48A;--g4:#D4EDDE;--g5:#F0FAF5;
+  --gold:#D4A843;--gold-l:#FFF8E7;
+  --r1:#C0392B;--r2:#E84545;--r-l:#FEF0F0;
+  --a1:#E67E22;--a-l:#FEF5E7;
+  --b1:#185FA5;--b2:#2376C5;--b-l:#EBF3FB;
+  --t1:#0D1B12;--t2:#3D5247;--t3:#6B8A7A;--t4:#A8BDB4;
+  --bd:rgba(10,92,68,0.10);--bd2:rgba(10,92,68,0.18);
+  --sh:0 1px 12px rgba(10,92,68,0.08);--sh2:0 4px 24px rgba(10,92,68,0.12);--sh3:0 8px 40px rgba(10,92,68,0.16);
+  --radius:14px;--radius2:20px;
+}
+[data-theme="dark"]{
+  --bg:#0C1510;--bg2:#111A14;--sf:#161F19;--sf2:#1C2820;
+  --g1:#22C48A;--g2:#1AAD7A;--g3:#22C48A;--g4:rgba(34,196,138,0.15);--g5:rgba(34,196,138,0.08);
+  --gold:#D4A843;--gold-l:rgba(212,168,67,0.12);
+  --r1:#FF6B6B;--r2:#FF4444;--r-l:rgba(255,107,107,0.12);
+  --a1:#FFA94D;--a-l:rgba(255,169,77,0.12);
+  --b1:#74B9FF;--b2:#5BA3F5;--b-l:rgba(116,185,255,0.12);
+  --t1:#E8F5EE;--t2:#A8C4B4;--t3:#6B8A7A;--t4:#3D5247;
+  --bd:rgba(34,196,138,0.12);--bd2:rgba(34,196,138,0.20);
+  --sh:0 1px 12px rgba(0,0,0,0.4);--sh2:0 4px 24px rgba(0,0,0,0.5);--sh3:0 8px 40px rgba(0,0,0,0.6);
+}
+html,body{min-height:100%;background:var(--bg);font-family:'Plus Jakarta Sans',sans-serif;color:var(--t1);-webkit-tap-highlight-color:transparent;transition:background .3s,color .3s}
+
+/* TOPBAR */
+.topbar{background:var(--g1);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.tb-l{display:flex;align-items:center;gap:10px}
+.tb-logo{width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.tb-logo svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tb-brand{font-family:'Clash Display',sans-serif;font-weight:600;font-size:15px;color:#fff;letter-spacing:.2px}
+.tb-biz{font-size:10px;color:rgba(255,255,255,0.55);margin-top:1px}
+.tb-r{display:flex;align-items:center;gap:8px}
+.theme-btn{width:30px;height:30px;background:rgba(255,255,255,0.12);border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.theme-btn svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logout-btn{font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.12);border:none;padding:5px 10px;border-radius:16px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500}
+.tb-clock{font-size:11px;color:rgba(255,255,255,0.5)}
+
+/* PIN SCREEN */
+.pin-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px}
+.pin-screen.hide{display:none}
+.pin-logo-wrap{width:80px;height:80px;background:var(--g1);border-radius:24px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 8px 32px rgba(10,92,68,0.35)}
+.pin-logo-wrap svg{width:36px;height:36px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pin-title{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700;color:var(--t1);letter-spacing:-.5px;margin-bottom:4px;text-align:center}
+.pin-sub2{font-size:13px;color:var(--t4);margin-bottom:32px;text-align:center}
+.pin-bizname{font-size:14px;color:var(--t3);margin-bottom:6px;text-align:center;font-weight:500}
+.pin-dots{display:flex;gap:14px;margin-bottom:32px}
+.pin-dot{width:18px;height:18px;border-radius:50%;background:var(--bd2);border:2.5px solid var(--bd2);transition:all .25s cubic-bezier(.175,.885,.32,1.275)}
+.pin-dot.filled{background:var(--g1);border-color:var(--g1);transform:scale(1.15)}
+[data-theme="dark"] .pin-dot.filled{background:var(--g3);border-color:var(--g3)}
+.pin-dot.error{background:var(--r2);border-color:var(--r2);animation:shk .4s ease}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:300px}
+.pin-key{height:66px;background:var(--sf);border:.5px solid var(--bd);border-radius:var(--radius2);font-family:'Clash Display',sans-serif;font-size:24px;font-weight:600;color:var(--t1);cursor:pointer;transition:all .15s;touch-action:manipulation;box-shadow:var(--sh);display:flex;align-items:center;justify-content:center}
+.pin-key:active{background:var(--g5);border-color:var(--g3);transform:scale(.94)}
+.pin-key.del{font-size:18px;color:var(--t3)}
+.pin-key.empty{background:none;border:none;box-shadow:none;pointer-events:none}
+.pin-err{font-size:12px;color:var(--r2);margin-top:18px;text-align:center;min-height:18px;font-weight:500}
+
+/* MAIN */
+.main{max-width:480px;margin:0 auto;padding:16px 14px 40px;width:100%;display:none}
+.main.show{display:block}
+
+/* REFRESH */
+.refresh-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.refresh-btn{height:38px;background:none;border:1.5px solid var(--bd2);border-radius:var(--radius);color:var(--t3);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0 14px;transition:all .15s;touch-action:manipulation}
+.refresh-btn:active{background:var(--bg2)}
+.refresh-btn svg{width:13px;height:13px;stroke:var(--t3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.last-updated{font-size:11px;color:var(--t4);font-weight:500}
+
+/* TABS */
+.tabs{display:flex;background:var(--sf);border-radius:var(--radius2);padding:4px;gap:3px;margin-bottom:16px;border:.5px solid var(--bd);box-shadow:var(--sh)}
+.tab-btn{flex:1;height:38px;background:none;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .2s;touch-action:manipulation;position:relative}
+.tab-btn.active{background:var(--g1);color:#fff}
+.tab-btn .badge{position:absolute;top:4px;right:4px;width:16px;height:16px;background:var(--r2);border-radius:50%;font-size:9px;font-weight:700;color:#fff;display:none;align-items:center;justify-content:center}
+.tab-btn .badge.show{display:flex}
+
+/* LOADING */
+.loading-state{text-align:center;padding:60px 20px;color:var(--t4)}
+.loading-spin{width:32px;height:32px;border:3px solid var(--bd2);border-top-color:var(--g1);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+[data-theme="dark"] .loading-spin{border-top-color:var(--g3)}
+
+/* SECTION */
+.section{display:none}
+.section.show{display:block}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-card{background:var(--sf);border-radius:var(--radius2);padding:14px 14px;border:.5px solid var(--bd);box-shadow:var(--sh)}
+.stat-card.full{grid-column:1/-1}
+.sc-label{font-size:9px;font-weight:600;color:var(--t4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.sc-value{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.5px;color:var(--t1)}
+.sc-value.green{color:var(--g1)}
+[data-theme="dark"] .sc-value.green{color:var(--g3)}
+.sc-value.red{color:var(--r2)}
+.sc-value.gold{color:var(--gold)}
+.sc-sub{font-size:10px;color:var(--t4);margin-top:3px;font-weight:500}
+.live-pill{display:inline-flex;align-items:center;gap:4px;background:var(--g4);border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700;color:var(--g1);margin-left:6px;vertical-align:middle}
+[data-theme="dark"] .live-pill{color:var(--g3)}
+.live-dot{width:5px;height:5px;background:var(--g3);border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* CARD */
+.card{background:var(--sf);border-radius:var(--radius2);padding:16px 14px;border:.5px solid var(--bd);box-shadow:var(--sh);margin-bottom:12px}
+.card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.card-bar{width:4px;height:16px;background:var(--g1);border-radius:2px;flex-shrink:0}
+[data-theme="dark"] .card-bar{background:var(--g3)}
+.card-bar.gold{background:var(--gold)}
+.card-bar.blue{background:var(--b1)}
+.card-bar.red{background:var(--r2)}
+.card-title{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:600;color:var(--t1);letter-spacing:-.2px}
+.card-title-right{margin-left:auto;font-size:11px;color:var(--t4);font-weight:500}
+
+/* STAFF FILTER */
+.staff-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.staff-chip{background:var(--bg);border:1.5px solid var(--bd);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--t3);cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;touch-action:manipulation}
+.staff-chip.active{background:var(--g1);border-color:var(--g1);color:#fff;font-weight:600}
+[data-theme="dark"] .staff-chip.active{background:var(--g3);border-color:var(--g3);color:var(--bg)}
+
+/* STAFF ROW */
+.staff-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid var(--bd)}
+.staff-row:last-child{border-bottom:none}
+.staff-avatar{width:34px;height:34px;border-radius:50%;background:var(--g4);display:flex;align-items:center;justify-content:center;font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700;color:var(--g1);flex-shrink:0;margin-right:10px}
+[data-theme="dark"] .staff-avatar{color:var(--g3)}
+.staff-info{flex:1}
+.staff-name{font-size:13px;font-weight:600;color:var(--t1)}
+.staff-stats-sub{font-size:11px;color:var(--t4);margin-top:2px;font-weight:500}
+.staff-revenue{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700;color:var(--g1)}
+[data-theme="dark"] .staff-revenue{color:var(--g3)}
+
+/* BAR CHART */
+.chart-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.chart-row:last-child{margin-bottom:0}
+.chart-label{font-size:11px;color:var(--t3);width:34px;flex-shrink:0;font-weight:600}
+.chart-track{flex:1;height:10px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.chart-fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.175,.885,.32,1.275)}
+.chart-fill.green{background:linear-gradient(90deg,var(--g2),var(--g3))}
+.chart-fill.gold{background:linear-gradient(90deg,var(--gold),#F0C040)}
+.chart-fill.blue{background:linear-gradient(90deg,var(--b1),var(--b2))}
+.chart-amount{font-family:'Clash Display',sans-serif;font-size:11px;font-weight:600;color:var(--t1);width:72px;text-align:right;flex-shrink:0}
+
+/* PRODUCT ROW */
+.prod-row{display:flex;align-items:center;padding:9px 0;border-bottom:.5px solid var(--bd)}
+.prod-row:last-child{border-bottom:none}
+.prod-rank{width:24px;font-size:14px;flex-shrink:0}
+.prod-name{flex:1;font-size:13px;font-weight:500;color:var(--t1);margin:0 10px}
+.prod-amount{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700;color:var(--g1)}
+[data-theme="dark"] .prod-amount{color:var(--g3)}
+
+/* TX ROW */
+.tx-row{display:flex;align-items:center;padding:9px 0;border-bottom:.5px solid var(--bd);gap:10px}
+.tx-row:last-child{border-bottom:none}
+.tx-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tx-dot.sale{background:var(--g3)}
+.tx-dot.refund{background:var(--r2)}
+.tx-dot.cancel{background:var(--t4)}
+.tx-dot.query{background:var(--a1)}
+.tx-info{flex:1;min-width:0}
+.tx-prod{font-size:13px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx-meta{font-size:10px;color:var(--t4);margin-top:2px;font-weight:500}
+.tx-receipt{font-size:9px;color:var(--t4);font-family:'Courier New',monospace}
+.tx-amount{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:700;flex-shrink:0}
+.tx-amount.pos{color:var(--g1)}
+[data-theme="dark"] .tx-amount.pos{color:var(--g3)}
+.tx-amount.neg{color:var(--r2)}
+.tx-type-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0}
+.tx-type-badge.sale{background:var(--g4);color:var(--g1)}
+[data-theme="dark"] .tx-type-badge.sale{color:var(--g3)}
+.tx-type-badge.refund{background:var(--r-l);color:var(--r2)}
+.tx-type-badge.cancel{background:var(--bg2);color:var(--t3)}
+.tx-type-badge.query{background:var(--a-l);color:var(--a1)}
+
+/* QUERY REVIEW */
+.query-item{background:var(--a-l);border:1px solid rgba(230,126,34,0.2);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.qi-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.qi-title{font-size:13px;font-weight:600;color:var(--t1)}
+.qi-time{font-size:11px;color:var(--t4);font-weight:500}
+.qi-reason{font-size:12px;color:var(--a1);margin-bottom:10px;font-weight:500}
+.qi-receipt{font-size:10px;color:var(--t4);font-family:'Courier New',monospace;margin-bottom:10px}
+.qi-actions{display:flex;gap:8px}
+.qi-approve{flex:1;height:36px;background:var(--g1);border:none;border-radius:10px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.qi-approve:active{transform:scale(.97)}
+.qi-reject{flex:1;height:36px;background:none;border:1.5px solid var(--r2);border-radius:10px;color:var(--r2);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.qi-reject:active{background:var(--r-l)}
+
+/* DATE FILTER */
+.date-filter-card{background:var(--sf);border-radius:var(--radius2);padding:16px;border:.5px solid var(--bd);box-shadow:var(--sh);margin-bottom:12px}
+.df-title{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px}
+.df-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.df-field label{font-size:10px;color:var(--t4);display:block;margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.df-field input{width:100%;height:44px;background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--t1);padding:0 12px;outline:none;-webkit-appearance:none;transition:border-color .15s}
+.df-field input:focus{border-color:var(--g1)}
+.apply-btn{width:100%;height:48px;background:var(--g1);border:none;border-radius:var(--radius);font-family:'Clash Display',sans-serif;font-size:15px;font-weight:600;color:#fff;cursor:pointer;transition:all .2s;touch-action:manipulation}
+.apply-btn:active{transform:scale(.98);background:var(--g2)}
+
+/* PRINT / EXPORT */
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.action-btn-d{height:46px;background:none;border:1.5px solid var(--bd2);border-radius:var(--radius);color:var(--t2);font-family:'Clash Display',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .15s;touch-action:manipulation}
+.action-btn-d:active{background:var(--bg2)}
+.action-btn-d svg{width:14px;height:14px;stroke:var(--t2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:28px 16px;color:var(--t4);font-size:13px;font-weight:500}
+
+.footer{text-align:center;font-size:10px;color:var(--t4);padding:8px 14px 20px;max-width:480px;margin:0 auto;font-weight:500}
+@keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-l">
+    <div class="tb-logo">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </div>
+    <div>
+      <div class="tb-brand">Owner Dashboard</div>
+      <div class="tb-biz" id="tb-biz">Loading...</div>
+    </div>
+  </div>
+  <div class="tb-r">
+    <div class="tb-clock" id="tb-clock">--:--</div>
+    <button class="theme-btn" onclick="toggleTheme()">
+      <svg id="theme-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="logout-btn" id="logout-btn" style="display:none" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<!-- PIN SCREEN -->
+<div class="pin-screen" id="pin-screen">
+  <div class="pin-logo-wrap">
+    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+  </div>
+  <div class="pin-title">Owner Access</div>
+  <div class="pin-bizname" id="pin-bizname"></div>
+  <div class="pin-sub2">Enter your dashboard PIN to view your business data</div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot" id="pd-0"></div>
+    <div class="pin-dot" id="pd-1"></div>
+    <div class="pin-dot" id="pd-2"></div>
+    <div class="pin-dot" id="pd-3"></div>
+  </div>
+  <div class="pin-pad">
+    <button class="pin-key" onclick="pinPress('1')">1</button>
+    <button class="pin-key" onclick="pinPress('2')">2</button>
+    <button class="pin-key" onclick="pinPress('3')">3</button>
+    <button class="pin-key" onclick="pinPress('4')">4</button>
+    <button class="pin-key" onclick="pinPress('5')">5</button>
+    <button class="pin-key" onclick="pinPress('6')">6</button>
+    <button class="pin-key" onclick="pinPress('7')">7</button>
+    <button class="pin-key" onclick="pinPress('8')">8</button>
+    <button class="pin-key" onclick="pinPress('9')">9</button>
+    <button class="pin-key empty"></button>
+    <button class="pin-key" onclick="pinPress('0')">0</button>
+    <button class="pin-key del" onclick="pinDel()">⌫</button>
+  </div>
+  <div class="pin-err" id="pin-err"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main">
+
+  <div class="refresh-row">
+    <button class="refresh-btn" onclick="loadData()">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      Refresh
+    </button>
+    <div class="last-updated" id="last-updated">Loading...</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-today" onclick="switchTab('today')">Today</button>
+    <button class="tab-btn" id="tab-week" onclick="switchTab('week')">Week</button>
+    <button class="tab-btn" id="tab-month" onclick="switchTab('month')">Month</button>
+    <button class="tab-btn" id="tab-custom" onclick="switchTab('custom')">All Time</button>
+    <button class="tab-btn" id="tab-queries" onclick="switchTab('queries')">Queries<div class="badge" id="queries-badge">0</div></button>
+  </div>
+
+  <div class="loading-state" id="loading-state">
+    <div class="loading-spin"></div>
+    Loading your business data...
+  </div>
+
+  <!-- TODAY -->
+  <div class="section" id="section-today">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="sc-label">Revenue <span class="live-pill"><span class="live-dot"></span>LIVE</span></div>
+        <div class="sc-value green" id="t-rev">₦0</div>
+        <div class="sc-sub" id="t-date">today</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Transactions</div>
+        <div class="sc-value" id="t-tx">0</div>
+        <div class="sc-sub" id="t-items">0 items</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Refunds</div>
+        <div class="sc-value red" id="t-ref">₦0</div>
+        <div class="sc-sub" id="t-ref-cnt">0 refunds</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Net Revenue</div>
+        <div class="sc-value green" id="t-net">₦0</div>
+        <div class="sc-sub">after refunds</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar"></div><div class="card-title">By Staff</div></div>
+      <div class="staff-chips" id="t-staff-chips"></div>
+      <div id="t-staff-rows"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar gold"></div><div class="card-title">Top Products</div></div>
+      <div id="t-products"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar blue"></div><div class="card-title">Recent Transactions</div></div>
+      <div id="t-transactions"></div>
+    </div>
+    <div class="action-row">
+      <button class="action-btn-d" onclick="printReport('today')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+      <button class="action-btn-d" onclick="exportCSV('today')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+    </div>
+  </div>
+
+  <!-- WEEK -->
+  <div class="section" id="section-week">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="sc-label">This Week</div>
+        <div class="sc-value green" id="w-rev">₦0</div>
+        <div class="sc-sub" id="w-range">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Daily Average</div>
+        <div class="sc-value" id="w-avg">₦0</div>
+        <div class="sc-sub" id="w-best">best day —</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar"></div><div class="card-title">Daily Chart</div></div>
+      <div id="w-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar"></div><div class="card-title">By Staff This Week</div></div>
+      <div class="staff-chips" id="w-staff-chips"></div>
+      <div id="w-staff-rows"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar gold"></div><div class="card-title">Top Products</div></div>
+      <div id="w-products"></div>
+    </div>
+    <div class="action-row">
+      <button class="action-btn-d" onclick="printReport('week')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+      <button class="action-btn-d" onclick="exportCSV('week')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+    </div>
+  </div>
+
+  <!-- MONTH -->
+  <div class="section" id="section-month">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="sc-label">This Month</div>
+        <div class="sc-value green" id="m-rev">₦0</div>
+        <div class="sc-sub" id="m-name">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Daily Average</div>
+        <div class="sc-value" id="m-avg">₦0</div>
+        <div class="sc-sub" id="m-best">best day —</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Transactions</div>
+        <div class="sc-value" id="m-tx">0</div>
+        <div class="sc-sub">this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Avg per Sale</div>
+        <div class="sc-value" id="m-atv">₦0</div>
+        <div class="sc-sub">transaction value</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar gold"></div><div class="card-title">Weekly Chart</div></div>
+      <div id="m-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar"></div><div class="card-title">By Staff This Month</div></div>
+      <div class="staff-chips" id="m-staff-chips"></div>
+      <div id="m-staff-rows"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar gold"></div><div class="card-title">Top 5 Products</div></div>
+      <div id="m-products"></div>
+    </div>
+    <div class="action-row">
+      <button class="action-btn-d" onclick="printReport('month')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button>
+      <button class="action-btn-d" onclick="exportCSV('month')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+    </div>
+  </div>
+
+  <!-- ALL TIME / CUSTOM -->
+  <div class="section" id="section-custom">
+    <div class="date-filter-card">
+      <div class="df-title">Select Date Range</div>
+      <div class="df-grid">
+        <div class="df-field"><label>From</label><input type="date" id="df-from"></div>
+        <div class="df-field"><label>To</label><input type="date" id="df-to"></div>
+      </div>
+      <button class="apply-btn" onclick="applyCustom()">Apply Filter</button>
+    </div>
+    <div id="custom-results" style="display:none">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="sc-label">Total Revenue</div><div class="sc-value green" id="c-rev">₦0</div><div class="sc-sub" id="c-period">—</div></div>
+        <div class="stat-card"><div class="sc-label">Transactions</div><div class="sc-value" id="c-tx">0</div><div class="sc-sub" id="c-days">0 days</div></div>
+        <div class="stat-card"><div class="sc-label">Refunds</div><div class="sc-value red" id="c-ref">₦0</div><div class="sc-sub" id="c-ref-cnt">0 refunds</div></div>
+        <div class="stat-card"><div class="sc-label">Net Revenue</div><div class="sc-value green" id="c-net">₦0</div><div class="sc-sub">after refunds</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-bar blue"></div><div class="card-title">Monthly Breakdown</div></div>
+        <div id="c-monthly-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-bar"></div><div class="card-title">By Staff</div></div>
+        <div class="staff-chips" id="c-staff-chips"></div>
+        <div id="c-staff-rows"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-bar gold"></div><div class="card-title">Top Products</div></div>
+        <div id="c-products"></div>
+      </div>
+      <div class="action-row">
+        <button class="action-btn-d" onclick="printReport('custom')"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print Report</button>
+        <button class="action-btn-d" onclick="exportCSV('custom')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUERIES -->
+  <div class="section" id="section-queries">
+    <div class="card">
+      <div class="card-head"><div class="card-bar red"></div><div class="card-title">Pending Queries</div><div class="card-title-right" id="queries-count">0 pending</div></div>
+      <div id="queries-list"><div class="empty-state">No pending queries 🎉</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-bar"></div><div class="card-title">CANCEL History</div></div>
+      <div id="cancels-list"><div class="empty-state">No cancellations today</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer" id="footer" style="display:none">Powered by SalesRep · Owner Dashboard · Data refreshes automatically</div>
+
+<script>
+// ╔══════════════════════════════════════════════╗
+// ║  ✏️  EDIT THESE 4 VALUES ONLY — PER CLIENT   ║
+// ╚══════════════════════════════════════════════╝
+const CONFIG = {
+  businessName: "Living Stone",
+  clientId:     "living-stone",
+  dashboardPin: "5555",
+  dataUrl:      "https://wumi88.app.n8n.cloud/webhook-test/salesrep-dashboard-data"
+};
+// ════════════════════════════════════════════════
+
+// ── THEME ──
+const savedTheme = localStorage.getItem('sr-dash-theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sr-dash-theme', next);
+  updateThemeIcon(next);
+}
+function updateThemeIcon(theme) {
+  const icon = document.getElementById('theme-icon');
+  if (!icon) return;
+  icon.innerHTML = theme === 'dark'
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// ── UTILS ──
+const $ = id => document.getElementById(id);
+const fmt = n => '₦' + Math.round(Math.abs(n)).toLocaleString('en-NG');
+function getWAT() { return new Date(new Date().getTime() + 3600000); }
+function fmtDate(d) { return d.toLocaleDateString('en-GB'); }
+function parseRowDate(row) { return new Date(`${row.year}-${String(row.month).padStart(2,'0')}-${String(row.day).padStart(2,'0')}`); }
+
+// ── INIT ──
+document.title = 'Dashboard — ' + CONFIG.businessName;
+$('tb-biz').textContent = CONFIG.businessName.toUpperCase();
+$('pin-bizname').textContent = CONFIG.businessName;
+
+// ── CLOCK ──
+function tick() {
+  const n = new Date();
+  $('tb-clock').textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+}
+tick(); setInterval(tick, 15000);
+
+// ── PIN ──
+let pinEntry = '';
+function updateDots() { for (let i=0; i<4; i++) { $('pd-'+i).classList.toggle('filled', i<pinEntry.length); $('pd-'+i).classList.remove('error'); } }
+function pinPress(d) { if (pinEntry.length>=4) return; pinEntry+=d; updateDots(); if(pinEntry.length===4) setTimeout(checkPin,150); }
+function pinDel() { pinEntry=pinEntry.slice(0,-1); updateDots(); $('pin-err').textContent=''; }
+function checkPin() {
+  if (pinEntry === CONFIG.dashboardPin) {
+    $('pin-screen').classList.add('hide');
+    $('main').classList.add('show');
+    $('logout-btn').style.display='block';
+    $('footer').style.display='block';
+    loadData();
+    autoRefreshInterval = setInterval(loadData, 60000);
+  } else {
+    for(let i=0;i<4;i++) $('pd-'+i).classList.add('error');
+    setTimeout(()=>{ pinEntry=''; updateDots(); $('pin-err').textContent='Wrong PIN. Try again.'; },500);
+  }
+}
+let autoRefreshInterval = null;
+function logout() {
+  clearInterval(autoRefreshInterval);
+  $('pin-screen').classList.remove('hide');
+  $('main').classList.remove('show');
+  $('logout-btn').style.display='none';
+  $('footer').style.display='none';
+  pinEntry=''; updateDots(); $('pin-err').textContent='';
+  allRows=[];
+}
+
+// ── DATA ──
+let allRows = [], currentTab = 'today', staffFilters = {};
+
+async function loadData() {
+  $('loading-state').style.display='block';
+  ['today','week','month','custom','queries'].forEach(s=>$('section-'+s).classList.remove('show'));
+  try {
+    const resp = await fetch(CONFIG.dataUrl);
+    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    const data = await resp.json();
+    allRows = data.rows || [];
+    $('loading-state').style.display='none';
+    $('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    updateQueriesBadge();
+    renderCurrentTab();
+  } catch(e) {
+    $('loading-state').innerHTML=`<div style="color:var(--r2);font-size:13px">Could not load data<br><small style="color:var(--t4)">${e.message}</small><br><br><button onclick="loadData()" style="background:var(--g1);color:#fff;border:none;padding:8px 20px;border-radius:10px;cursor:pointer;font-size:13px;margin-top:8px">Try Again</button></div>`;
+  }
+}
+
+function updateQueriesBadge() {
+  const queries = allRows.filter(r=>r.type==='QUERY');
+  const badge = $('queries-badge');
+  if (queries.length > 0) { badge.textContent=queries.length; badge.classList.add('show'); }
+  else badge.classList.remove('show');
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  currentTab=tab;
+  ['today','week','month','custom','queries'].forEach(t=>{
+    $('tab-'+t).classList.toggle('active',t===tab);
+    $('section-'+t).classList.toggle('show',t===tab);
+  });
+  $('loading-state').style.display='none';
+  if (allRows.length) renderCurrentTab();
+}
+function renderCurrentTab() {
+  if(currentTab==='today') renderToday();
+  else if(currentTab==='week') renderWeek();
+  else if(currentTab==='month') renderMonth();
+  else if(currentTab==='queries') renderQueries();
+  $('section-'+currentTab).classList.add('show');
+}
+
+// ── HELPERS ──
+function calcStats(rows) {
+  const sales=rows.filter(r=>r.type==='SALE');
+  const refunds=rows.filter(r=>r.type==='REFUND');
+  const revenue=sales.reduce((s,r)=>s+r.total,0);
+  const refundAmt=refunds.reduce((s,r)=>s+Math.abs(r.total),0);
+  const productMap={}, staffMap={};
+  rows.filter(r=>r.type==='SALE').forEach(r=>{
+    if(!productMap[r.product]) productMap[r.product]=0; productMap[r.product]+=r.total;
+    if(!staffMap[r.staff]) staffMap[r.staff]={sales:0,count:0,refunds:0};
+    staffMap[r.staff].sales+=r.total; staffMap[r.staff].count++;
+  });
+  refunds.forEach(r=>{ if(!staffMap[r.staff]) staffMap[r.staff]={sales:0,count:0,refunds:0}; staffMap[r.staff].refunds+=Math.abs(r.total); });
+  return {revenue,refundAmt,net:revenue-refundAmt,productMap,staffMap,salesCount:sales.length,refundCount:refunds.length};
+}
+function makeChart(items,maxVal,fillClass='green') {
+  if(!items.length) return '<div class="empty-state">No data yet</div>';
+  return items.map(([label,val])=>`
+    <div class="chart-row">
+      <div class="chart-label">${label}</div>
+      <div class="chart-track"><div class="chart-fill ${fillClass}" style="width:${maxVal>0?(val/maxVal*100).toFixed(1):0}%"></div></div>
+      <div class="chart-amount">${fmt(val)}</div>
+    </div>`).join('');
+}
+function makeProducts(productMap,limit=5) {
+  const sorted=Object.entries(productMap).sort((a,b)=>b[1]-a[1]).slice(0,limit);
+  if(!sorted.length) return '<div class="empty-state">No products yet</div>';
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+  return sorted.map(([p,v],i)=>`<div class="prod-row"><div class="prod-rank">${medals[i]||i+1}</div><div class="prod-name">${p}</div><div class="prod-amount">${fmt(v)}</div></div>`).join('');
+}
+function makeStaffChips(section,staffList) {
+  const active=staffFilters[section]||'All';
+  return ['All',...staffList].map(s=>`<div class="staff-chip ${active===s?'active':''}" onclick="setStaffFilter('${section}','${s}')">${s}</div>`).join('');
+}
+function setStaffFilter(section,staff) { staffFilters[section]=staff; renderCurrentTab(); }
+function filterByStaff(rows,section) { const f=staffFilters[section]||'All'; return f==='All'?rows:rows.filter(r=>r.staff===f); }
+function makeStaffRows(staffMap,filterStaff) {
+  let entries=Object.entries(staffMap).sort((a,b)=>b[1].sales-a[1].sales);
+  if(filterStaff&&filterStaff!=='All') entries=entries.filter(([n])=>n===filterStaff);
+  if(!entries.length) return '<div class="empty-state">No data</div>';
+  return entries.map(([name,data])=>`
+    <div class="staff-row">
+      <div class="staff-avatar">${name[0].toUpperCase()}</div>
+      <div class="staff-info">
+        <div class="staff-name">${name}</div>
+        <div class="staff-stats-sub">${data.count} sales${data.refunds>0?' · -'+fmt(data.refunds)+' refunds':''}</div>
+      </div>
+      <div class="staff-revenue">${fmt(data.sales)}</div>
+    </div>`).join('');
+}
+function makeTxRows(rows,limit=15) {
+  const shown=[...rows].reverse().slice(0,limit);
+  if(!shown.length) return '<div class="empty-state">No transactions yet</div>';
+  return shown.map(r=>`
+    <div class="tx-row">
+      <div class="tx-dot ${r.type.toLowerCase()}"></div>
+      <div class="tx-info">
+        <div class="tx-prod">${r.product}${r.qty>1?' ×'+r.qty:''}</div>
+        <div class="tx-meta">${r.time} · ${r.staff}</div>
+        <div class="tx-receipt">${r.receiptno||''}</div>
+      </div>
+      <div class="tx-type-badge ${r.type.toLowerCase()}">${r.type}</div>
+      <div class="tx-amount ${r.type==='REFUND'?'neg':'pos'}">${r.type==='REFUND'?'-':''}${fmt(r.total)}</div>
+    </div>`).join('');
+}
+
+// ── TODAY ──
+function renderToday() {
+  const wat=getWAT(), todayStr=fmtDate(wat);
+  const todayRows=allRows.filter(r=>r.date===todayStr);
+  const sf=staffFilters['today']||'All';
+  const filtRows=filterByStaff(todayRows,'today');
+  const allStats=calcStats(todayRows), stats=calcStats(filtRows);
+  $('t-rev').textContent=fmt(allStats.revenue);
+  $('t-date').textContent=wat.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+  $('t-tx').textContent=allStats.salesCount;
+  $('t-items').textContent=todayRows.length+' entries';
+  $('t-ref').textContent=fmt(allStats.refundAmt);
+  $('t-ref-cnt').textContent=allStats.refundCount+' refund'+(allStats.refundCount!==1?'s':'');
+  $('t-net').textContent=fmt(allStats.net);
+  const staffList=[...new Set(todayRows.map(r=>r.staff))];
+  $('t-staff-chips').innerHTML=makeStaffChips('today',staffList);
+  $('t-staff-rows').innerHTML=makeStaffRows(stats.staffMap,sf==='All'?null:sf);
+  $('t-products').innerHTML=makeProducts(stats.productMap,8);
+  $('t-transactions').innerHTML=makeTxRows(filtRows,20);
+}
+
+// ── WEEK ──
+function renderWeek() {
+  const wat=getWAT(), dow=wat.getDay(), diff=dow===0?6:dow-1;
+  const mon=new Date(wat); mon.setDate(wat.getDate()-diff); mon.setHours(0,0,0,0);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59,999);
+  const weekRows=allRows.filter(r=>{const d=parseRowDate(r);return d>=mon&&d<=sun;});
+  const filtRows=filterByStaff(weekRows,'week');
+  const stats=calcStats(filtRows), allStats=calcStats(weekRows);
+  $('w-rev').textContent=fmt(allStats.net);
+  $('w-range').textContent=fmtDate(mon)+' – '+fmtDate(sun);
+  $('w-avg').textContent=fmt(allStats.net/7);
+  const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const dailyMap={};
+  for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);dailyMap[fmtDate(d)]={name:dayNames[i],val:0};}
+  filtRows.filter(r=>r.type==='SALE').forEach(r=>{if(dailyMap[r.date])dailyMap[r.date].val+=r.total;});
+  const entries=Object.values(dailyMap).map(d=>[d.name,d.val]);
+  const maxVal=Math.max(...entries.map(e=>e[1]),1);
+  const bestDay=entries.reduce((a,b)=>b[1]>a[1]?b:a,['—',0]);
+  $('w-best').textContent='best: '+bestDay[0];
+  $('w-chart').innerHTML=makeChart(entries,maxVal,'green');
+  const staffList=[...new Set(weekRows.map(r=>r.staff))];
+  $('w-staff-chips').innerHTML=makeStaffChips('week',staffList);
+  $('w-staff-rows').innerHTML=makeStaffRows(stats.staffMap,staffFilters['week']==='All'?null:staffFilters['week']);
+  $('w-products').innerHTML=makeProducts(stats.productMap,5);
+}
+
+// ── MONTH ──
+function renderMonth() {
+  const wat=getWAT();
+  const monthRows=allRows.filter(r=>r.month===wat.getMonth()+1&&r.year===wat.getFullYear());
+  const filtRows=filterByStaff(monthRows,'month');
+  const stats=calcStats(filtRows), allStats=calcStats(monthRows);
+  const mNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  $('m-rev').textContent=fmt(allStats.net);
+  $('m-name').textContent=mNames[wat.getMonth()]+' '+wat.getFullYear();
+  const daysInM=new Date(wat.getFullYear(),wat.getMonth()+1,0).getDate();
+  $('m-avg').textContent=fmt(allStats.net/daysInM);
+  $('m-tx').textContent=allStats.salesCount;
+  $('m-atv').textContent=allStats.salesCount>0?fmt(allStats.revenue/allStats.salesCount):'₦0';
+  const dailyRev={};
+  monthRows.filter(r=>r.type==='SALE').forEach(r=>{dailyRev[r.date]=(dailyRev[r.date]||0)+r.total;});
+  const bestDay=Object.entries(dailyRev).sort((a,b)=>b[1]-a[1])[0];
+  $('m-best').textContent=bestDay?'best: '+bestDay[0]:'—';
+  const wkMap={'Wk1':0,'Wk2':0,'Wk3':0,'Wk4':0,'Wk5':0};
+  filtRows.filter(r=>r.type==='SALE').forEach(r=>{const wk='Wk'+Math.ceil(r.day/7);if(wkMap[wk]!==undefined)wkMap[wk]+=r.total;});
+  const wkEntries=Object.entries(wkMap).filter(([,v])=>v>0);
+  $('m-chart').innerHTML=makeChart(wkEntries,Math.max(...wkEntries.map(e=>e[1]),1),'gold');
+  const staffList=[...new Set(monthRows.map(r=>r.staff))];
+  $('m-staff-chips').innerHTML=makeStaffChips('month',staffList);
+  $('m-staff-rows').innerHTML=makeStaffRows(stats.staffMap,staffFilters['month']==='All'?null:staffFilters['month']);
+  $('m-products').innerHTML=makeProducts(stats.productMap,5);
+}
+
+// ── CUSTOM ──
+function applyCustom() {
+  const fromVal=$('df-from').value, toVal=$('df-to').value;
+  if(!fromVal||!toVal){alert('Please select both dates.');return;}
+  const from=new Date(fromVal); from.setHours(0,0,0,0);
+  const to=new Date(toVal); to.setHours(23,59,59,999);
+  if(from>to){alert('From date must be before To date.');return;}
+  const rows=allRows.filter(r=>{const d=parseRowDate(r);return d>=from&&d<=to;});
+  const filtRows=filterByStaff(rows,'custom');
+  const allStats=calcStats(rows), stats=calcStats(filtRows);
+  $('custom-results').style.display='block';
+  $('c-rev').textContent=fmt(allStats.revenue);
+  $('c-period').textContent=fromVal+' to '+toVal;
+  $('c-tx').textContent=allStats.salesCount;
+  const activeDays=new Set(rows.filter(r=>r.type==='SALE').map(r=>r.date)).size;
+  $('c-days').textContent=activeDays+' active days';
+  $('c-ref').textContent=fmt(allStats.refundAmt);
+  $('c-ref-cnt').textContent=allStats.refundCount+' refund'+(allStats.refundCount!==1?'s':'');
+  $('c-net').textContent=fmt(allStats.net);
+  const monthlyMap={};
+  filtRows.filter(r=>r.type==='SALE').forEach(r=>{
+    const key=r.year+'/'+String(r.month).padStart(2,'0');
+    const sNames=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    if(!monthlyMap[key])monthlyMap[key]={label:sNames[r.month]+' '+r.year,val:0};
+    monthlyMap[key].val+=r.total;
+  });
+  const mEntries=Object.entries(monthlyMap).sort((a,b)=>a[0].localeCompare(b[0])).map(([,v])=>[v.label,v.val]);
+  $('c-monthly-chart').innerHTML=mEntries.length?makeChart(mEntries,Math.max(...mEntries.map(e=>e[1]),1),'blue'):'<div class="empty-state">No data for this range</div>';
+  const staffList=[...new Set(rows.map(r=>r.staff))];
+  $('c-staff-chips').innerHTML=makeStaffChips('custom',staffList);
+  $('c-staff-rows').innerHTML=makeStaffRows(stats.staffMap,staffFilters['custom']==='All'?null:staffFilters['custom']);
+  $('c-products').innerHTML=makeProducts(stats.productMap,10);
+}
+
+// ── QUERIES ──
+function renderQueries() {
+  const queries=allRows.filter(r=>r.type==='QUERY');
+  const cancels=allRows.filter(r=>r.type==='CANCEL');
+  $('queries-count').textContent=queries.length+' pending';
+  $('queries-list').innerHTML=queries.length?queries.map(r=>`
+    <div class="query-item">
+      <div class="qi-header"><div class="qi-title">${r.product} — ${r.staff}</div><div class="qi-time">${r.time}</div></div>
+      <div class="qi-reason">${r.queryreason||'No reason given'}</div>
+      <div class="qi-receipt">Receipt: ${r.receiptno||'—'} · ₦${Math.round(r.total).toLocaleString('en-NG')}</div>
+      <div class="qi-actions">
+        <button class="qi-approve" onclick="resolveQuery('${r.receiptno}','RESOLVED')">✓ Approve</button>
+        <button class="qi-reject" onclick="resolveQuery('${r.receiptno}','REJECTED')">✕ Reject</button>
+      </div>
+    </div>`).join(''):'<div class="empty-state">No pending queries 🎉</div>';
+  $('cancels-list').innerHTML=cancels.length?makeTxRows(cancels,20):'<div class="empty-state">No cancellations today</div>';
+}
+async function resolveQuery(receiptNo,resolution) {
+  const row=allRows.find(r=>r.receiptno===receiptNo&&r.type==='QUERY');
+  if(!row) return;
+  row.type=resolution;
+  try {
+    await fetch(CONFIG.dataUrl.replace('salesrep-dashboard-data','salesrep-query-resolve'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({receiptNo,resolution,clientId:CONFIG.clientId})});
+  } catch(e){}
+  renderQueries(); updateQueriesBadge();
+}
+
+// ── PRINT REPORT ──
+function getRowsForPeriod(period) {
+  const wat=getWAT();
+  if(period==='today') return allRows.filter(r=>r.date===fmtDate(wat));
+  if(period==='week'){
+    const dow=wat.getDay(),diff=dow===0?6:dow-1;
+    const mon=new Date(wat);mon.setDate(wat.getDate()-diff);mon.setHours(0,0,0,0);
+    const sun=new Date(mon);sun.setDate(mon.getDate()+6);sun.setHours(23,59,59,999);
+    return allRows.filter(r=>{const d=parseRowDate(r);return d>=mon&&d<=sun;});
+  }
+  if(period==='month') return allRows.filter(r=>r.month===wat.getMonth()+1&&r.year===wat.getFullYear());
+  const fromVal=$('df-from').value,toVal=$('df-to').value;
+  if(!fromVal||!toVal){alert('Apply a filter first.');return[];}
+  const from=new Date(fromVal);from.setHours(0,0,0,0);
+  const to=new Date(toVal);to.setHours(23,59,59,999);
+  return allRows.filter(r=>{const d=parseRowDate(r);return d>=from&&d<=to;});
+}
+function printReport(period) {
+  const rows=getRowsForPeriod(period);
+  if(!rows.length){alert('No data for this period.');return;}
+  const stats=calcStats(rows);
+  const rowsHtml=rows.map(r=>`<tr><td>${r.date}</td><td>${r.time}</td><td>${r.product}${r.qty>1?' ×'+r.qty:''}</td><td style="color:${r.type==='REFUND'?'#C0392B':r.type==='CANCEL'?'#999':'inherit'}">${r.type}</td><td>${r.staff}</td><td>${r.receiptno||''}</td><td style="text-align:right;${r.type==='REFUND'?'color:#C0392B':''}">${r.type==='REFUND'?'-':''}₦${Math.round(Math.abs(r.total)).toLocaleString('en-NG')}</td></tr>`).join('');
+  const w=window.open('','_blank','width=800,height=900');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Report - ${CONFIG.businessName}</title>
+  <style>body{font-family:Arial,sans-serif;font-size:12px;padding:24px;max-width:760px;margin:0 auto}h2{font-size:17px;margin-bottom:4px}p{color:#666;font-size:11px;margin-bottom:16px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}.s{background:#F0F4F1;padding:12px;border-radius:8px;text-align:center}
+  .sl{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.sv{font-size:15px;font-weight:bold;color:#0A5C44}
+  table{width:100%;border-collapse:collapse}th{background:#0A5C44;color:#fff;padding:8px 10px;text-align:left;font-size:11px}
+  td{padding:6px 10px;border-bottom:1px solid #eee;font-size:11px}tfoot td{font-weight:bold;background:#F0F4F1}
+  .footer{text-align:center;font-size:10px;color:#bbb;margin-top:20px}</style></head><body>
+  <h2>📊 ${CONFIG.businessName} — Sales Report</h2>
+  <p>Generated ${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} at ${new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</p>
+  <div class="stats"><div class="s"><div class="sl">Revenue</div><div class="sv">₦${Math.round(stats.revenue).toLocaleString('en-NG')}</div></div>
+  <div class="s"><div class="sl">Refunds</div><div class="sv" style="color:#C0392B">-₦${Math.round(stats.refundAmt).toLocaleString('en-NG')}</div></div>
+  <div class="s"><div class="sl">Net</div><div class="sv">₦${Math.round(stats.net).toLocaleString('en-NG')}</div></div>
+  <div class="s"><div class="sl">Transactions</div><div class="sv">${stats.salesCount}</div></div></div>
+  <table><thead><tr><th>Date</th><th>Time</th><th>Product</th><th>Type</th><th>Staff</th><th>Receipt No</th><th>Amount</th></tr></thead>
+  <tbody>${rowsHtml}</tbody>
+  <tfoot><tr><td colspan="6">NET TOTAL</td><td style="text-align:right">₦${Math.round(stats.net).toLocaleString('en-NG')}</td></tr></tfoot></table>
+  <div class="footer">Powered by SalesRep · ${CONFIG.businessName}</div></body></html>`);
+  w.document.close(); setTimeout(()=>w.print(),300);
+}
+
+// ── EXPORT CSV ──
+function exportCSV(period) {
+  const rows=getRowsForPeriod(period);
+  if(!rows.length){alert('No data for this period.');return;}
+  const csv='Date,Time,Product,Quantity,Price,Total,Type,Staff,ReceiptNo\n'+
+    rows.map(r=>`${r.date},${r.time},"${r.product}",${r.qty},${r.price},${Math.abs(r.total)},${r.type},${r.staff},${r.receiptno||''}`).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=CONFIG.businessName.replace(/\s/g,'-')+'-report-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// Default dates
+const today=new Date(), ago=new Date(today); ago.setDate(today.getDate()-30);
+$('df-to').value=today.toISOString().slice(0,10);
+$('df-from').value=ago.toISOString().slice(0,10);
+</script>
+</body>
+</html>
